@@ -7,7 +7,7 @@ public class Pusher : MonoBehaviour {
 	Rigidbody2D rb2d;
 	public float force;
 	public float rotateSpeed = 15f;
-	private bool isPlayer
+	private bool isPlayer;
 	// Use this for initialization
 	void Awake () {
 		pe2d = GetComponent<PointEffector2D>();
@@ -23,8 +23,10 @@ public class Pusher : MonoBehaviour {
 	void Update () {
 		if (Input.GetMouseButton(0)) {
 			
-			if (true) {
+			if (isPlayer) {
 				pe2d.forceMagnitude = force;
+			} else {
+				pe2d.forceMagnitude = 0;
 			}
 
 			sr.enabled = true;
@@ -38,6 +40,11 @@ public class Pusher : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D col) {
-		
+		if(col.gameObject.tag == "Ball") {
+			isPlayer = true;
+		} else {
+			isPlayer = false;
+		}
 	}
+
 }

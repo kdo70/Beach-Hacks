@@ -11,14 +11,11 @@ public class Spawner : MonoBehaviour {
 	public float waveWait = 5f;
 	public float xOffset = 10f;
 	public float yOffset = 7f;
+	public bool active;
 
-	[SerializeField]
-	float test;
-	//Vector3 StartVelocity;
-//	private RandomVelocity velo;
 
 	void Awake () {
-	//	velo = GetComponent<RandomVelocity> ();
+
 	}
 
 	void Start () {
@@ -27,7 +24,7 @@ public class Spawner : MonoBehaviour {
 
 	IEnumerator SpawnWaves () {
 		yield return new WaitForSeconds (startWait);
-		while (true) {
+		while (active) {
 			for (int i = 0; i < hazardCount; i++) {
 
 				Vector3 spawnPosition = new Vector3 (0, 0, 0);

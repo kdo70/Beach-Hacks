@@ -29,9 +29,12 @@ public class Ball : MonoBehaviour {
 	void Start () {
 		transform.position = new Vector3(0,0,0);
 		ballVel.AddForce (new Vector2 (Random.Range(-minSpeed,minSpeed), Random.Range(-minSpeed,minSpeed)));
-		//ballVel.AddForce (new Vector2 (-500, 0));
 	}
 	
+	public void StartBall() {
+		transform.position = new Vector3(0,0,0);
+		ballVel.AddForce (new Vector2 (Random.Range(-minSpeed,minSpeed), Random.Range(-minSpeed,minSpeed)));
+	}
 
 	void Update () {
 		velocity = ballVel.velocity;
