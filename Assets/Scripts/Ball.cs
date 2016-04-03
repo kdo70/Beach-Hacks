@@ -13,20 +13,28 @@ public class Ball : MonoBehaviour {
 	[SerializeField]
 	float reflectAngle;
 	[SerializeField]
-	Vector2 currentVelocity;
+	Vector2 velocity;
+	public float health = 100;
+	public float minSpeed = 10;
+
+	private SpriteRenderer sr;
+	private CircleCollider2D cc2d;
+
 	void Awake () {
 		ballVel = GetComponent<Rigidbody2D> ();
+		sr = GetComponent<SpriteRenderer> ();
+		cc2d = GetComponent<CircleCollider2D> ();
 	}
 
 	void Start () {
 		transform.position = new Vector3(0,0,0);
-		ballVel.AddForce (new Vector2 (Random.Range(-speed,speed), Random.Range(-speed,speed)));
+		ballVel.AddForce (new Vector2 (Random.Range(-minSpeed,minSpeed), Random.Range(-minSpeed,minSpeed)));
 		//ballVel.AddForce (new Vector2 (-500, 0));
 	}
 	
-	// Update is called once per frame
-	void FixedUpdate () {
-		currentVelocity = ballVel.velocity;
+
+	void Update () {
+		velocity = ballVel.velocity;
 
 
 	}
@@ -40,6 +48,28 @@ public class Ball : MonoBehaviour {
 
 		//ballVel.velocity = ballVel.velocity.magnitude * Vector2.Reflect(ballVel.velocity.normalized,norm);
 		ballVel.MovePosition (ballVel.position + ballVel.velocity.normalized*0.001f);
+
+		if (Mathf.Abs(ballVel.velocity.x) > minSpeed || Mathf.Abs(ballVel.velocity.y) > minSpeed) {
+			ballVel.velocity /= 1.25f;
+		} 
+		if(col.gameObject.tag == "Damaging Object") {
+			StartCoroutine (Damage (5, .1f, .2f));
+		}
 	}
 
+
+
+	IEnumerator Damage(int nTimes,float timeOn,float timeOff) {
+		health -= 10;
+		Physics2D.IgnoreLayerCollision (8, 11, true);
+		while (nTimes > 0) {
+			sr.enabled = true;
+			yield return new WaitForSeconds (timeOn);
+			sr.enabled = false;
+			yield return new WaitForSeconds (timeOff);
+			nTimes--;
+		}
+		Physics2D.IgnoreLayerCollision (8, 11, false);
+		sr.enabled = true;
+	}
 }

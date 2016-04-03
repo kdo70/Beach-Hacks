@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Paddle : MonoBehaviour {
+	/**
 	private Vector3 mousePosition;
 	public float moveSpeed = 0.0f;
 	private bool canMove = true;
@@ -53,4 +54,5 @@ public class Paddle : MonoBehaviour {
 		yield return new WaitForSeconds (.25f);
 		canMove = true;
 	}
+	*/
 }
