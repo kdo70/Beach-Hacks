@@ -15,13 +15,7 @@ public class RandomVelocity : MonoBehaviour {
 	}
 
 	void Start () {
-		/**
-		GameObject[] borders = GameObject.FindGameObjectsWithTag("Border");
 
-		for (int i = 0; i < borders.Length; i++) {
-			Physics2D.IgnoreCollision(borders[i].GetComponent<Collider2D>(),GetComponent<Collider2D>);
-		}
-	*/	
 		xSpeed = Random.Range (-maxSpeed, maxSpeed);
 		ySpeed = Random.Range (-maxSpeed, maxSpeed);
 		transform.position = new Vector3 (xSpeed > 0 ?  -xOffset: xOffset, ySpeed > 0 ?  -yOffset: yOffset,0);
@@ -29,7 +23,7 @@ public class RandomVelocity : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
+
 	void FixedUpdate () {
 		rb2d.MoveRotation (rb2d.rotation + rotateSpeed * Time.fixedDeltaTime);
 	}

@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
 		floor = GameObject.Find ("Background");
 		ball = playerPrefab.GetComponent<Ball> ();
 	}
-	// Use this for initialization
+
 	void Start () {
 
 		spawner.active = false;
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour {
 		audio.Play ();
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
 		if(!gameStarted && Time.timeScale == 0){
 			if(Input.GetKeyDown(KeyCode.Space)){
@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour {
 	void OnPlayerKilled(){
 		spawner.active = false;
 
-//		player.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 		audio.clip = clips [0];
 		audio.Play ();
 		timeManager.ManipulateTime (0, 5.5f);
