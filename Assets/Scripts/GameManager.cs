@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
 		spawner.active = false;
 		Time.timeScale = 0;
 
-		continueText.text = "Press Space To Start";
+		continueText.text = "Click To Start";
 		title.text = "Skulls and Asteroids";
 
 		bestTime = PlayerPrefs.GetFloat("BestTime");
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update () {
 		if(!gameStarted && Time.timeScale == 0){
-			if(Input.GetKeyDown(KeyCode.Space)){
+			if(Input.anyKeyDown){
 				timeManager.ManipulateTime (1, 1f);
 				ResetGame ();
 			}
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour {
 		timeManager.ManipulateTime (0, 5.5f);
 		gameStarted = false;
 
-		continueText.text = "Press Space To Start";
+		continueText.text = "Click To Start";
 		title.canvasRenderer.SetAlpha (1);
 //		resetBestScoreButton.SetActive (true);
 
