@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
 
 	public Text continueText;
 	private float blinkTime = 0f;
