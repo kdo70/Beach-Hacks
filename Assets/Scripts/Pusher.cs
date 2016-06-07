@@ -27,18 +27,11 @@ public class Pusher : MonoBehaviour {
 		#if UNITY_IOS || UNITY_ANDROID 
 		if (Input.touchCount > 0) {
 
-			if (isPlayer) {
-				pe2d.forceMagnitude = force;
-			} else {
-				pe2d.forceMagnitude = 0;
-			}
+			MakeTheForceOnlyAffectBall ();
 			//Spawn the vortex
 			sr.enabled = true;
-			//Grabs the position where the tap occurs
-			Vector3 touchPosition = Input.GetTouch(0).position;
-			touchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-			//Sets the vortex position to the tap position
-			transform.position = new Vector3(touchPosition.x,touchPosition.y,0);
+
+			MoveVortexToPosition (Input.GetTouch(0).position);
 		} else {
 			pe2d.forceMagnitude = 0;
 			sr.enabled = false;
@@ -48,16 +41,10 @@ public class Pusher : MonoBehaviour {
 		#else
 		if (Input.GetMouseButton(0)) {
 
-			if (isPlayer) {
-				pe2d.forceMagnitude = force;
-			} else {
-				pe2d.forceMagnitude = 0;
-			}
+			MakeTheVortexOnlyAffectBall ();
 
 			sr.enabled = true;
-			Vector3 mousePosition = Input.mousePosition;
-			mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-			transform.position = new Vector3(mousePosition.x,mousePosition.y,0);
+			MoveVortexToPosition (Input.mousePosition);
 		} else {
 			pe2d.forceMagnitude = 0;
 			sr.enabled = false;
@@ -66,6 +53,19 @@ public class Pusher : MonoBehaviour {
 
 		#endif
 
+	}
+
+	void MoveVortexToPosition (Vector3 controlPosition) {
+		Vector3 newControlPosition = Camera.main.ScreenToWorldPoint (controlPosition);
+		transform.position = new Vector3(newControlPosition.x, newControlPosition.y,0);
+	}
+
+	void MakeTheVortexOnlyAffectBall () {
+		if (isPlayer) {
+			pe2d.forceMagnitude = force;
+		} else {
+			pe2d.forceMagnitude = 0;
+		}
 	}
 
 	void OnTriggerStay2D(Collider2D col) {
