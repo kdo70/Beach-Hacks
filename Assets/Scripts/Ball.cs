@@ -28,25 +28,20 @@ public class Ball : MonoBehaviour {
 
 
 	void OnCollisionEnter2D(Collision2D col) {
-		//Bouncing collision
-		float rotation;
-		float cosAngle;
-		Vector2 norm;
-		float reflectAngle;
-		rotation = (col.transform.eulerAngles.z)*(Mathf.PI/180);
-		norm = new Vector2(Mathf.Cos(rotation),Mathf.Sin(rotation));
 
 		ballVel.MovePosition (ballVel.position + ballVel.velocity.normalized*0.001f);
 
-		//Slows the speed down to the minspeed
-		if (Mathf.Abs(ballVel.velocity.x) > minSpeed || Mathf.Abs(ballVel.velocity.y) > minSpeed) {
+		if (IsBallSpeedGreaterThanMinSpeed ()) {
 			ballVel.velocity /= 1.25f;
 		} 
-
-		//when the ball hits a asteroid or skull
+			
 		if(col.gameObject.tag == "Damaging Object") {
 			StartCoroutine (Damage (5, .1f, .2f));
 		}
+	}
+
+	bool IsBallSpeedGreaterThanMinSpeed () {
+		return Mathf.Abs (ballVel.velocity.x) > minSpeed || Mathf.Abs (ballVel.velocity.y) > minSpeed;
 	}
 
 

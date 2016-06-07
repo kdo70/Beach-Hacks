@@ -3,83 +3,62 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
+	public Text title;
+	public Text subtitle;
+	public Text timeText;
+	public Text healthText;
 
-	public Text continueText;
 	private float blinkTime = 0f;
 	private bool blink;
-	private GameObject resetBestScoreButton;
 
-	public Text scoreText;
-	public Text healthText;
 	public static float timeElapsed = 0f;
-	private float bestTime = 0f;
-	private bool bestBestTime;
 
 	public GameObject playerPrefab;
 	private Ball ball;
-	public static float points;
-	private float bestPoints;
-
 
 	public static bool gameStarted;
 	private GameObject player;
 	private TimeManager timeManager;
-	private GameObject floor;
 	private Spawner spawner;
-
-	public Text title;
 
 	public AudioClip[] clips;
 	private AudioSource audio;
 
-	void Awake(){
+	void Awake() {
 		audio = GetComponent<AudioSource> ();
-//		resetBestScoreButton = GameObject.Find ("ResetBestScoreButton");
 		spawner = GameObject.Find ("Spawner").GetComponent<Spawner> ();
 		timeManager = GetComponent<TimeManager> ();
-		floor = GameObject.Find ("Background");
 		ball = playerPrefab.GetComponent<Ball> ();
 	}
 
 	void Start () {
-
 		spawner.active = false;
 		Time.timeScale = 0;
 
-		continueText.text = "Click To Start";
+		subtitle.text = "Click To Start";
 		title.text = "Skulls and Asteroids";
 
-		bestTime = PlayerPrefs.GetFloat("BestTime");
-		bestPoints = PlayerPrefs.GetFloat("BestPoints");
-		audio.clip = clips [0];
-		audio.Play ();
+		PlayMusic (0);
 	}
 	
 
 	void Update () {
+		
 		if(!gameStarted && Time.timeScale == 0){
 			if(Input.anyKeyDown){
 				timeManager.ManipulateTime (1, 1f);
 				ResetGame ();
 			}
 		}
+
 		if(!gameStarted){
-			blinkTime++;
-			if(blinkTime% 40 == 0){
-				blink = !blink;
-			}
-			continueText.canvasRenderer.SetAlpha (blink ? 0 : 1);
+			TextBlink (subtitle);
+			MenuText ();
 
-			var textColor = bestBestTime ? "#FF0" : "#FFF";
-
-
-			scoreText.text = "Best: " + FormatTime (bestTime);
 		} else {
-			
 			timeElapsed += Time.deltaTime;
-			healthText.text = "Health: " + ball.health;
-			scoreText.text = "Time: " + FormatTime (timeElapsed);
+			InGameText ();
 			if(ball.health <= 0) {
 				OnPlayerKilled ();
 			}
@@ -89,53 +68,57 @@ public class GameManager : MonoBehaviour {
 	void OnPlayerKilled(){
 		spawner.active = false;
 
-		audio.clip = clips [0];
-		audio.Play ();
+		PlayMusic (0);
+
 		timeManager.ManipulateTime (0, 5.5f);
 		gameStarted = false;
 
-		continueText.text = "Click To Start";
-		title.canvasRenderer.SetAlpha (1);
-//		resetBestScoreButton.SetActive (true);
+		BeatBestTime ();
+	}
 
-		if(timeElapsed > bestTime){
-			bestTime = timeElapsed;
-			PlayerPrefs.SetFloat ("BestTime", bestTime);
-			bestBestTime = true;
+	void BeatBestTime () {
+		if (timeElapsed > PlayerPrefs.GetFloat("BestTime")) {
+			PlayerPrefs.SetFloat ("BestTime", timeElapsed);
 		}
-	}
-
-	public void ResetBestScore(){
-		PlayerPrefs.SetFloat ("BestTime", 0);
-		PlayerPrefs.SetFloat ("BestPoints", 0);
-		bestTime = PlayerPrefs.GetFloat("BestTime");
-	}
+	}		
 
 	void ResetGame() {
 		ball.health = 100;
 		spawner.active = true;
-		audio.clip = clips [1];
-		audio.Play ();
-
-//		resetBestScoreButton.SetActive (false);
-
-//		spawner.ResetSpawner();
-
-	//	player = GameObjectUtil.Instantiate(playerPrefab, new Vector3(0,0,0));
-
-
-
+		PlayMusic (1);
 		gameStarted = true;
 
-		continueText.canvasRenderer.SetAlpha (0);
-		title.canvasRenderer.SetAlpha (0);
-		points = 0;
 		timeElapsed = 0;
-
-		bestBestTime = false;
 	}
 
-	string FormatTime(float value){
+	void InGameText () {
+		healthText.canvasRenderer.SetAlpha (1);
+		healthText.text = "Health: " + ball.health;
+		title.canvasRenderer.SetAlpha (0);
+		subtitle.canvasRenderer.SetAlpha (0);
+		timeText.text = "Time: " + FormatTime(timeElapsed);
+	}
+
+	void MenuText () {
+		healthText.canvasRenderer.SetAlpha (0);
+		title.canvasRenderer.SetAlpha (1);
+		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
+	}
+
+	void PlayMusic (int song) {
+		audio.clip = clips [song];
+		audio.Play ();
+	}
+
+	void TextBlink (Text text) {
+		blinkTime++;
+		if (blinkTime % 40 == 0) {
+			blink = !blink;
+		}
+		text.canvasRenderer.SetAlpha (blink ? 0 : 1);
+	}
+
+	string FormatTime(float value) {
 		TimeSpan t = TimeSpan.FromSeconds (value);
 
 		return string.Format("{0:D2}:{1:D2}",t.Minutes,t.Seconds);
