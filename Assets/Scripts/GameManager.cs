@@ -17,18 +17,15 @@ public class GameManager : Singleton<GameManager> {
 	public GameObject playerPrefab;
 	private Ball ball;
 
-
 	public static bool gameStarted;
 	private GameObject player;
 	private TimeManager timeManager;
 	private Spawner spawner;
 
-
-
 	public AudioClip[] clips;
 	private AudioSource audio;
 
-	void Awake(){
+	void Awake() {
 		audio = GetComponent<AudioSource> ();
 		spawner = GameObject.Find ("Spawner").GetComponent<Spawner> ();
 		timeManager = GetComponent<TimeManager> ();
@@ -36,13 +33,11 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void Start () {
-
 		spawner.active = false;
 		Time.timeScale = 0;
 
 		subtitle.text = "Click To Start";
 		title.text = "Skulls and Asteroids";
-
 
 		PlayMusic (0);
 	}
@@ -62,7 +57,6 @@ public class GameManager : Singleton<GameManager> {
 			MenuText ();
 
 		} else {
-			
 			timeElapsed += Time.deltaTime;
 			InGameText ();
 			if(ball.health <= 0) {
@@ -107,6 +101,7 @@ public class GameManager : Singleton<GameManager> {
 
 	void MenuText () {
 		healthText.canvasRenderer.SetAlpha (0);
+		title.canvasRenderer.SetAlpha (1);
 		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 	}
 
