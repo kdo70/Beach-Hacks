@@ -8,6 +8,8 @@ public class GameManager : Singleton<GameManager> {
 	public Text subtitle;
 	public Text timeText;
 	public Text healthText;
+	public GameObject subtitleButton;
+	public GameObject resetBestTimeButton;
 
 	private float blinkTime = 0f;
 	private bool blink;
@@ -36,7 +38,7 @@ public class GameManager : Singleton<GameManager> {
 		spawner.active = false;
 		Time.timeScale = 0;
 
-		subtitle.text = "Click To Start";
+		subtitle.text = "Press here to Continue";
 		title.text = "Skulls and Asteroids";
 
 		PlayMusic (0);
@@ -44,14 +46,14 @@ public class GameManager : Singleton<GameManager> {
 	
 
 	void Update () {
-		
+		/**
 		if(!gameStarted && Time.timeScale == 0){
 			if(Input.anyKeyDown){
-				timeManager.ManipulateTime (1, 1f);
+				
 				ResetGame ();
 			}
 		}
-
+*/
 		if(!gameStarted){
 			TextBlink (subtitle);
 			MenuText ();
@@ -65,14 +67,19 @@ public class GameManager : Singleton<GameManager> {
 		}
 	}
 
-	void OnPlayerKilled(){
+	public void ResetBestTime () {
+		PlayerPrefs.SetFloat ("BestTime", 0);
+	}
+
+	void OnPlayerKilled  () {
 		spawner.active = false;
 
 		PlayMusic (0);
 
 		timeManager.ManipulateTime (0, 5.5f);
 		gameStarted = false;
-
+		subtitleButton.SetActive (true);
+		resetBestTimeButton.SetActive(true);
 		BeatBestTime ();
 	}
 
@@ -82,13 +89,16 @@ public class GameManager : Singleton<GameManager> {
 		}
 	}		
 
-	void ResetGame() {
+	public void ResetGame() {
+		timeManager.ManipulateTime (1, 1f);
 		ball.health = 100;
 		spawner.active = true;
 		PlayMusic (1);
 		gameStarted = true;
 
 		timeElapsed = 0;
+		subtitleButton.SetActive(false);
+		resetBestTimeButton.SetActive(false);
 	}
 
 	void InGameText () {
