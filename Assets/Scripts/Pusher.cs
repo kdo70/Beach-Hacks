@@ -27,7 +27,7 @@ public class Pusher : MonoBehaviour {
 		#if UNITY_IOS || UNITY_ANDROID 
 		if (Input.touchCount > 0) {
 
-			MakeTheForceOnlyAffectBall ();
+			MakeTheVortexOnlyAffectBall ();
 			//Spawn the vortex
 			sr.enabled = true;
 
