@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager> {
 	public GameObject subtitleButton;
 	public GameObject resetBestTimeButton;
 	public GameObject creditsButton;
-	public Button creditsButtonOnClick;
+	public GameObject backButton;
 
 	private float blinkTime = 0f;
 	private bool blink;
@@ -66,6 +66,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void ResetBestTime () {
 		PlayerPrefs.SetFloat ("BestTime", 0);
+		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 	}
 
 	void OnPlayerKilled  () {
@@ -112,19 +113,17 @@ public class GameManager : Singleton<GameManager> {
 		resetBestTimeButton.SetActive(true);
 		creditsButton.SetActive (true);
 		creditsText.SetActive (false);
-		creditsButtonOnClick.onClick.RemoveListener (() => MenuUI ());
-		creditsButtonOnClick.onClick.AddListener (() => CreditsUI ());
+		backButton.SetActive (false);
 	}
 
 	public void CreditsUI () {
 		title.canvasRenderer.SetAlpha (0);
 		subtitleButton.SetActive (false);
 		timeText.text = "";
-		creditsButtonText.text = "Back";
 		resetBestTimeButton.SetActive(false);
 		creditsText.SetActive (true);
-		creditsButtonOnClick.onClick.RemoveListener (() => CreditsUI ());
-		creditsButtonOnClick.onClick.AddListener (() => MenuUI ());
+		backButton.SetActive (true);
+		creditsButton.SetActive (false);
 	}
 
 	void PlayMusic (int song) {
