@@ -8,8 +8,12 @@ public class GameManager : Singleton<GameManager> {
 	public Text subtitle;
 	public Text timeText;
 	public Text healthText;
+	public Text creditsButtonText;
+	public GameObject creditsText;
 	public GameObject subtitleButton;
 	public GameObject resetBestTimeButton;
+	public GameObject creditsButton;
+	public Button creditsButtonOnClick;
 
 	private float blinkTime = 0f;
 	private bool blink;
@@ -37,30 +41,23 @@ public class GameManager : Singleton<GameManager> {
 	void Start () {
 		spawner.active = false;
 		Time.timeScale = 0;
-
+		creditsText.SetActive (false);
+		creditsButtonText.text = "Credits";
 		subtitle.text = "Press here to Continue";
 		title.text = "Skulls and Asteroids";
-
+		MenuUI ();
 		PlayMusic (0);
 	}
 	
 
 	void Update () {
-		/**
-		if(!gameStarted && Time.timeScale == 0){
-			if(Input.anyKeyDown){
-				
-				ResetGame ();
-			}
-		}
-*/
 		if(!gameStarted){
 			TextBlink (subtitle);
-			MenuText ();
 
 		} else {
 			timeElapsed += Time.deltaTime;
-			InGameText ();
+			healthText.text = "Health: " + ball.health;
+			timeText.text = "Time: " + FormatTime(timeElapsed);
 			if(ball.health <= 0) {
 				OnPlayerKilled ();
 			}
@@ -72,14 +69,11 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void OnPlayerKilled  () {
-		spawner.active = false;
-
-		PlayMusic (0);
-
 		timeManager.ManipulateTime (0, 5.5f);
+		spawner.active = false;
+		PlayMusic (0);
 		gameStarted = false;
-		subtitleButton.SetActive (true);
-		resetBestTimeButton.SetActive(true);
+		MenuUI ();
 		BeatBestTime ();
 	}
 
@@ -91,28 +85,46 @@ public class GameManager : Singleton<GameManager> {
 
 	public void ResetGame() {
 		timeManager.ManipulateTime (1, 1f);
-		ball.health = 100;
 		spawner.active = true;
 		PlayMusic (1);
 		gameStarted = true;
-
+		InGameUI ();
+		ball.health = 100;
 		timeElapsed = 0;
-		subtitleButton.SetActive(false);
-		resetBestTimeButton.SetActive(false);
+
 	}
 
-	void InGameText () {
+	void InGameUI () {
 		healthText.canvasRenderer.SetAlpha (1);
-		healthText.text = "Health: " + ball.health;
 		title.canvasRenderer.SetAlpha (0);
 		subtitle.canvasRenderer.SetAlpha (0);
-		timeText.text = "Time: " + FormatTime(timeElapsed);
+		subtitleButton.SetActive(false);
+		resetBestTimeButton.SetActive(false);
+		creditsButton.SetActive (false);
 	}
 
-	void MenuText () {
+	public void MenuUI () {
+		subtitleButton.SetActive (true);
 		healthText.canvasRenderer.SetAlpha (0);
 		title.canvasRenderer.SetAlpha (1);
 		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
+		subtitleButton.SetActive (true);
+		resetBestTimeButton.SetActive(true);
+		creditsButton.SetActive (true);
+		creditsText.SetActive (false);
+		creditsButtonOnClick.onClick.RemoveListener (() => MenuUI ());
+		creditsButtonOnClick.onClick.AddListener (() => CreditsUI ());
+	}
+
+	public void CreditsUI () {
+		title.canvasRenderer.SetAlpha (0);
+		subtitleButton.SetActive (false);
+		timeText.text = "";
+		creditsButtonText.text = "Back";
+		resetBestTimeButton.SetActive(false);
+		creditsText.SetActive (true);
+		creditsButtonOnClick.onClick.RemoveListener (() => CreditsUI ());
+		creditsButtonOnClick.onClick.AddListener (() => MenuUI ());
 	}
 
 	void PlayMusic (int song) {
