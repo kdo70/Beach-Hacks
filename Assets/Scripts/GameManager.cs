@@ -74,13 +74,17 @@ public class GameManager : Singleton<GameManager> {
 		spawner.active = false;
 		PlayMusic (0);
 		gameStarted = false;
-		BeatBestTime ();
 		MenuUI ();
 	}
 
 	void BeatBestTime () {
 		if (timeElapsed > PlayerPrefs.GetFloat("BestTime")) {
+			healthText.canvasRenderer.SetAlpha (1);
+			healthText.text = "Old Best Time:" + FormatTime (PlayerPrefs.GetFloat ("BestTime"));
+			timeText.text = "New Best Time:" + FormatTime (timeElapsed);
 			PlayerPrefs.SetFloat ("BestTime", timeElapsed);
+		} else {
+			timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 		}
 	}		
 
@@ -108,7 +112,7 @@ public class GameManager : Singleton<GameManager> {
 		subtitleButton.SetActive (true);
 		healthText.canvasRenderer.SetAlpha (0);
 		title.canvasRenderer.SetAlpha (1);
-		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
+		BeatBestTime ();
 		subtitleButton.SetActive (true);
 		resetBestTimeButton.SetActive(true);
 		creditsButton.SetActive (true);
@@ -118,6 +122,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void CreditsUI () {
 		title.canvasRenderer.SetAlpha (0);
+		healthText.canvasRenderer.SetAlpha (0);
 		subtitleButton.SetActive (false);
 		timeText.text = "";
 		resetBestTimeButton.SetActive(false);
