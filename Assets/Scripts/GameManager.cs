@@ -74,8 +74,8 @@ public class GameManager : Singleton<GameManager> {
 		spawner.active = false;
 		PlayMusic (0);
 		gameStarted = false;
-		MenuUI ();
 		BeatBestTime ();
+		MenuUI ();
 	}
 
 	void BeatBestTime () {
