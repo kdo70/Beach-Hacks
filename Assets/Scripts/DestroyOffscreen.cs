@@ -2,10 +2,19 @@
 using System.Collections;
 
 public class DestroyOffscreen : MonoBehaviour {
+	private GameObject screen;
 
-	// Use this for initialization
-	void Start () {
-		StartCoroutine (Destroy (7));
+	void Awake () {
+		screen = GameObject.FindGameObjectWithTag ("Background");
+	}
+	void Update () {
+		if (OutOfBounds ()) {
+			StartCoroutine (Destroy (1));
+		}
+	}
+
+	bool OutOfBounds() {
+		return Mathf.Abs (transform.position.x) > screen.GetComponent<Renderer> ().bounds.size.x || Mathf.Abs (transform.position.y) > screen.GetComponent<Renderer> ().bounds.size.y;
 	}
 	
 	IEnumerator Destroy(float time) {
@@ -15,6 +24,5 @@ public class DestroyOffscreen : MonoBehaviour {
 
 	public void OnOutOfBounds(){
 		Destroy (gameObject);
-
 	}
 }
