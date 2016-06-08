@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager> {
 	public GameObject subtitleButton;
 	public GameObject resetBestTimeButton;
 	public GameObject creditsButton;
-	public Button creditsButtonOnClick;
+	public GameObject backButton;
 
 	private float blinkTime = 0f;
 	private bool blink;
@@ -66,6 +66,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void ResetBestTime () {
 		PlayerPrefs.SetFloat ("BestTime", 0);
+		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 	}
 
 	void OnPlayerKilled  () {
@@ -74,12 +75,16 @@ public class GameManager : Singleton<GameManager> {
 		PlayMusic (0);
 		gameStarted = false;
 		MenuUI ();
-		BeatBestTime ();
 	}
 
 	void BeatBestTime () {
 		if (timeElapsed > PlayerPrefs.GetFloat("BestTime")) {
+			healthText.canvasRenderer.SetAlpha (1);
+			healthText.text = "Old Best Time:" + FormatTime (PlayerPrefs.GetFloat ("BestTime"));
+			timeText.text = "New Best Time:" + FormatTime (timeElapsed);
 			PlayerPrefs.SetFloat ("BestTime", timeElapsed);
+		} else {
+			timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 		}
 	}		
 
@@ -107,24 +112,23 @@ public class GameManager : Singleton<GameManager> {
 		subtitleButton.SetActive (true);
 		healthText.canvasRenderer.SetAlpha (0);
 		title.canvasRenderer.SetAlpha (1);
-		timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
+		BeatBestTime ();
 		subtitleButton.SetActive (true);
 		resetBestTimeButton.SetActive(true);
 		creditsButton.SetActive (true);
 		creditsText.SetActive (false);
-		creditsButtonOnClick.onClick.RemoveListener (() => MenuUI ());
-		creditsButtonOnClick.onClick.AddListener (() => CreditsUI ());
+		backButton.SetActive (false);
 	}
 
 	public void CreditsUI () {
 		title.canvasRenderer.SetAlpha (0);
+		healthText.canvasRenderer.SetAlpha (0);
 		subtitleButton.SetActive (false);
 		timeText.text = "";
-		creditsButtonText.text = "Back";
 		resetBestTimeButton.SetActive(false);
 		creditsText.SetActive (true);
-		creditsButtonOnClick.onClick.RemoveListener (() => CreditsUI ());
-		creditsButtonOnClick.onClick.AddListener (() => MenuUI ());
+		backButton.SetActive (true);
+		creditsButton.SetActive (false);
 	}
 
 	void PlayMusic (int song) {
