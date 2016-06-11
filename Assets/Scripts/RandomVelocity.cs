@@ -4,20 +4,23 @@ using System.Collections;
 public class RandomVelocity : MonoBehaviour {
 	Rigidbody2D rb2d;
 	SpriteRenderer sr;
+	CameraScale cs;
 	public float minSpeed;
 	public float maxSpeed;
 	public float rotateSpeed = 10f;
 	private float xSpeed;
 	private float ySpeed;
-	public float xOffset = 10f;
-	public float yOffset = 7f;
+	private float xOffset;
+	private float yOffset;
 	void Awake () {
 		rb2d = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
+		cs = GameObject.Find ("Background").GetComponent<CameraScale> ();
 	}
 
 	void Start () {
-
+		xOffset = cs.GetWorldScreenWidth () / 2  *  Random.Range (.6f, .9f);
+		yOffset = cs.GetWorldScreenHeight () /2;
 		xSpeed = Random.Range (-maxSpeed, maxSpeed);
 		ySpeed = Random.Range (-maxSpeed, maxSpeed);
 		transform.position = new Vector3 (xSpeed > 0 ?  -xOffset: xOffset, ySpeed > 0 ?  -yOffset: yOffset,0);
