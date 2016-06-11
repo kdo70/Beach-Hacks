@@ -3,17 +3,25 @@ using System.Collections;
 
 public class CameraScale : MonoBehaviour {
  	SpriteRenderer sr;
-
+	[SerializeField]
+	float worldScreenHeight;
+	[SerializeField]
+	float worldScreenWidth;
 	void Awake() {
 		sr = GetComponent<SpriteRenderer>();
 	}
 	void Start () {
-		float worldScreenHeight = Camera.main.orthographicSize * 2;
-		float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+		worldScreenHeight = Camera.main.orthographicSize * 2;
+		worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
          
-		transform.localScale = new Vector3 (
-			worldScreenWidth / sr.sprite.bounds.size.x,
-			worldScreenHeight / sr.sprite.bounds.size.y, 1);
+		transform.localScale = new Vector3 (worldScreenWidth / sr.sprite.bounds.size.x, worldScreenHeight / sr.sprite.bounds.size.y, 1);
 	}
 
+	public float GetWorldScreenHeight () {
+		return worldScreenHeight;
+	}
+
+	public float GetWorldScreenWidth () {
+		return worldScreenWidth;
+	}
 }
