@@ -86,6 +86,7 @@ public class GameManager : Singleton<GameManager> {
 		} else {
 			timeText.text = "Best Time: " + FormatTime (PlayerPrefs.GetFloat("BestTime"));
 		}
+		timeElapsed = 0;
 	}		
 
 	public void ResetGame() {
@@ -95,8 +96,6 @@ public class GameManager : Singleton<GameManager> {
 		gameStarted = true;
 		InGameUI ();
 		ball.health = 100;
-		timeElapsed = 0;
-
 	}
 
 	void InGameUI () {
