@@ -9,6 +9,10 @@ public class Asteroid : MonoBehaviour {
 		sr = GetComponent<SpriteRenderer> ();
 	}
 
+	void OnDisable () {
+		sr.sprite = sprites [Random.Range (0, sprites.Length)];
+	}
+
 	void Start () {
 		//Spawn an asteroid with a random color
 		sr.sprite = sprites [Random.Range (0, sprites.Length)];
@@ -20,4 +24,5 @@ public class Asteroid : MonoBehaviour {
 		//when hit, the asteroid changes color
 		sr.sprite = sprites [Random.Range (0, sprites.Length)];
 	}
+		
 }
