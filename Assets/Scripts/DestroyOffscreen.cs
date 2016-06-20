@@ -10,7 +10,7 @@ public class DestroyOffscreen : MonoBehaviour {
 	}
 	void Update () {
 		if (OutOfBounds ()) {
-			StartCoroutine (Destroy (.5f));
+			StartCoroutine (Destroy (.25f));
 		}
 	}
 
