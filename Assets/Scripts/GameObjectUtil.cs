@@ -6,6 +6,7 @@ public class GameObjectUtil {
 
 	private static Dictionary<RecycleGameObject, ObjectPool> pools = new Dictionary<RecycleGameObject, ObjectPool> ();
 
+	//Use On OnEnable() method for things that should happen on each call of Instantiate
 	public static GameObject Instantiate(GameObject prefab, Vector3 pos){
 		GameObject instance = null;
 
@@ -15,11 +16,12 @@ public class GameObjectUtil {
 			instance = pool.NextObject (pos).gameObject;
 		} else {
 			instance = GameObject.Instantiate (prefab);
-		//	instance.transform.position = pos;
+			instance.transform.position = pos;
 		}
 		return instance;
 	}
 
+	//Use On OnDisable() method for things that should happen on each call of Destroy
 	public static void Destroy(GameObject gameObject){
 		var recycleGameObject = gameObject.GetComponent < RecycleGameObject >();
 		if (recycleGameObject != null) {

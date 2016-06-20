@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+//Add this script for each object that should be recycled
 
 public interface IRecyle{
 	void Restart ();
