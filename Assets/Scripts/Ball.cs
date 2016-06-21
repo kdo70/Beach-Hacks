@@ -4,20 +4,17 @@ using System.Collections;
 public class Ball : MonoBehaviour {
 	Rigidbody2D ballVel;
 
-	public float health = 100;
+	private float health;
 	private float minSpeed = 50;
 	private SpriteRenderer sr;
-	private CircleCollider2D cc2d;
 
 	void Awake () {
 		ballVel = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
-		cc2d = GetComponent<CircleCollider2D> ();
 	}
 
 	void Start () {
-		transform.position = new Vector3(0,0,0);
-		ballVel.AddForce (new Vector2 (Random.Range(-minSpeed,minSpeed), Random.Range(-minSpeed,minSpeed)));
+		StartBall ();
 	}
 	
 	public void StartBall() {
@@ -60,5 +57,13 @@ public class Ball : MonoBehaviour {
 		//Turn off physics collision for the ball
 		Physics2D.IgnoreLayerCollision (8, 11, false);
 		sr.enabled = true;
+	}
+
+	public float GetBallHealth () {
+		return health;
+	}
+
+	public void ResetHealth () {
+		health = 100;
 	}
 }

@@ -3,13 +3,14 @@ using System.Collections;
 
 public class DestroyOffscreen : MonoBehaviour {
 	private GameObject screen;
-
+	public delegate void OnDestroy();
+	public event OnDestroy DestroyCallBack;
 	void Awake () {
 		screen = GameObject.FindGameObjectWithTag ("Background");
 	}
 	void Update () {
 		if (OutOfBounds ()) {
-			StartCoroutine (Destroy (.5f));
+			StartCoroutine (Destroy (.25f));
 		}
 	}
 
@@ -23,6 +24,9 @@ public class DestroyOffscreen : MonoBehaviour {
 	}
 
 	public void OnOutOfBounds(){
-		Destroy (gameObject);
+		GameObjectUtil.Destroy (gameObject);
+		if(DestroyCallBack != null){
+			DestroyCallBack ();
+		}
 	}
 }

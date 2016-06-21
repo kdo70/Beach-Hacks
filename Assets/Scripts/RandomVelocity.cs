@@ -19,15 +19,24 @@ public class RandomVelocity : MonoBehaviour {
 	}
 
 	void Start () {
-		xOffset = cs.GetWorldScreenWidth () / 2  *  Random.Range (.6f, .9f);
-		yOffset = cs.GetWorldScreenHeight () /2;
-		xSpeed = Random.Range (-maxSpeed, maxSpeed);
-		ySpeed = Random.Range (-maxSpeed, maxSpeed);
+		transform.position = new Vector3 (xSpeed > 0 ?  -xOffset: xOffset, ySpeed > 0 ?  -yOffset: yOffset,0);
+	}
+
+	void OnEnable () {
+		GetOffsets ();
+		GetSpeeds ();
 		transform.position = new Vector3 (xSpeed > 0 ?  -xOffset: xOffset, ySpeed > 0 ?  -yOffset: yOffset,0);
 		rb2d.AddForce (new Vector2 (xSpeed > 0 ? xSpeed + minSpeed : xSpeed - minSpeed, ySpeed > 0 ? ySpeed + minSpeed : ySpeed - minSpeed));
 		if(xSpeed > 0) {
 			sr.flipX = true;
+		} else {
+			sr.flipX = false;
 		}
+	}
+
+	void OnDisable () {
+		rb2d.velocity = Vector3.zero;
+		transform.rotation = Quaternion.identity;
 	}
 	
 
@@ -39,4 +48,13 @@ public class RandomVelocity : MonoBehaviour {
 		}
 	}
 		
+	void GetOffsets () {
+		xOffset = cs.GetWorldScreenWidth () / 2 * Random.Range (.6f, .9f);
+		yOffset = cs.GetWorldScreenHeight () / 2;
+	}
+
+	void GetSpeeds () {
+		xSpeed = Random.Range (-maxSpeed, maxSpeed);
+		ySpeed = Random.Range (-maxSpeed, maxSpeed);
+	}
 }
