@@ -30,10 +30,10 @@ public class GameManager : Singleton<GameManager> {
 	private Spawner spawner;
 
 	public AudioClip[] clips;
-	private AudioSource audio;
+	private AudioSource audioManager;
 
-	void Awake() {
-		audio = GetComponent<AudioSource> ();
+	new void Awake() {
+		audioManager = GetComponent<AudioSource> ();
 		spawner = GameObject.Find ("Spawner").GetComponent<Spawner> ();
 		timeManager = GetComponent<TimeManager> ();
 		ball = playerPrefab.GetComponent<Ball> ();
@@ -136,8 +136,8 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void PlayMusic (int song) {
-		audio.clip = clips [song];
-		audio.Play ();
+		audioManager.clip = clips [song];
+		audioManager.Play ();
 	}
 
 	void TextBlink (Text text) {

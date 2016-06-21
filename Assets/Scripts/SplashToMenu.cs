@@ -3,24 +3,24 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class SplashToMenu : MonoBehaviour {
-	private GUITexture guiTexture;
+	private GUITexture splash;
 	public float fadeSpeed = 1.5f;          // Speed that the screen fades to and from black.
 	public float delay = 2.5f;
 	private Color normalColor;
 
 
 	void Awake () {
-		guiTexture = GetComponent<GUITexture> ();
+		splash = GetComponent<GUITexture> ();
 
 	}
 
 	void Start() {
 		// Set the texture so that it is the the size of the screen and covers it.
-		guiTexture.pixelInset = new Rect(0f, 0f, 0f, 0f);
+		splash.pixelInset = new Rect(0f, 0f, 0f, 0f);
 		//Gets the normal color of the guiTexture
-		normalColor = guiTexture.color; 
+		normalColor = splash.color; 
 		//Sets the texture color to be black(so it can fade to normal when the scene starts)
-		guiTexture.color = Color.black;
+		splash.color = Color.black;
 	}
 
 
@@ -39,13 +39,13 @@ public class SplashToMenu : MonoBehaviour {
 
 	void FadeToFull () {
 		// Lerp the colour of the texture between itself and the normal state
-		guiTexture.color = Color.Lerp(guiTexture.color, normalColor, fadeSpeed * Time.deltaTime);
+		splash.color = Color.Lerp(splash.color, normalColor, fadeSpeed * Time.deltaTime);
 	}
 
 
 	void FadeToBlack () {
 		// Lerp the colour of the texture between itself and black.
-		guiTexture.color = Color.Lerp(guiTexture.color, Color.black, fadeSpeed * Time.deltaTime);
+		splash.color = Color.Lerp(splash.color, Color.black, fadeSpeed * Time.deltaTime);
 	}
 		
 
@@ -54,7 +54,7 @@ public class SplashToMenu : MonoBehaviour {
 		FadeToBlack();
 
 		// If the texture is almost clear...
-		if(guiTexture.color.a >= 0.99f) {
+		if(splash.color.a >= 0.99f) {
 			// ... change the scene
 			SceneManager.LoadScene(1);
 
