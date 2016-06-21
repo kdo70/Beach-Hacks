@@ -19,6 +19,7 @@ public class GameManager : Singleton<GameManager> {
 	private bool blink;
 
 	public static float timeElapsed = 0f;
+	private float localHealth;
 
 	public GameObject playerPrefab;
 	private Ball ball;
@@ -39,6 +40,7 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void Start () {
+		Application.targetFrameRate = 60;
 		spawner.active = false;
 		Time.timeScale = 0;
 		creditsText.SetActive (false);
@@ -56,9 +58,12 @@ public class GameManager : Singleton<GameManager> {
 
 		} else {
 			timeElapsed += Time.deltaTime;
-			healthText.text = "Health: " + ball.health;
+			if (localHealth != ball.GetBallHealth ()) {
+				localHealth = ball.GetBallHealth ();
+				healthText.text = "Health: " + localHealth;
+			}
 			timeText.text = "Time: " + FormatTime(timeElapsed);
-			if(ball.health <= 0) {
+			if(ball.GetBallHealth () <= 0) {
 				OnPlayerKilled ();
 			}
 		}
@@ -95,7 +100,7 @@ public class GameManager : Singleton<GameManager> {
 		PlayMusic (1);
 		gameStarted = true;
 		InGameUI ();
-		ball.health = 100;
+		ball.ResetHealth ();
 	}
 
 	void InGameUI () {

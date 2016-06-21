@@ -20,7 +20,7 @@ public class Spawner : MonoBehaviour {
 		yield return new WaitForSeconds (startWait);
 		while (active) {
 			for (int i = 0; i < hazardCount; i++) {
-				GameObject random = (GameObject) GameObjectUtil.Instantiate (prefabs [Random.Range (0, prefabs.Length)], transform.position);
+				GameObjectUtil.Instantiate (prefabs [Random.Range (0, prefabs.Length)], transform.position);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
