@@ -20,6 +20,7 @@ public class Ball : MonoBehaviour {
 	public void StartBall() {
 		transform.position = new Vector3(0,0,0);
 		ballVel.AddForce (new Vector2 (Random.Range(-minSpeed,minSpeed), Random.Range(-minSpeed,minSpeed)));
+		StartCoroutine (Blink (3, .1f, .2f));
 	}
 		
 
@@ -33,7 +34,8 @@ public class Ball : MonoBehaviour {
 		} 
 			
 		if(col.gameObject.tag == "Damaging Object") {
-			StartCoroutine (Damage (5, .1f, .2f));
+			Damage ();
+			StartCoroutine (Blink (5, .1f, .2f));
 		}
 	}
 
@@ -43,8 +45,8 @@ public class Ball : MonoBehaviour {
 
 
 	//Immunity delay
-	IEnumerator Damage(int nTimes,float timeOn,float timeOff) {
-		health -= 10;
+	IEnumerator Blink(int nTimes,float timeOn,float timeOff) {
+		
 		//Turn off physics collision for the ball
 		Physics2D.IgnoreLayerCollision (8, 11, true);
 		while (nTimes > 0) {
@@ -57,6 +59,10 @@ public class Ball : MonoBehaviour {
 		//Turn off physics collision for the ball
 		Physics2D.IgnoreLayerCollision (8, 11, false);
 		sr.enabled = true;
+	}
+
+	void Damage () {
+		health -= 10;
 	}
 
 	public float GetBallHealth () {
